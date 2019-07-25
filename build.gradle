@@ -3,7 +3,11 @@ plugins {
 	id 'java'
 }
 
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.oocl'
 version = '0.0.1-SNAPSHOT'
@@ -14,9 +18,17 @@ repositories {
 }
 
 dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.0.Final'
 	runtimeOnly 'com.h2database:h2'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.0'
+	compile(
+			'net.sf.json-lib:json-lib:2.4:jdk15'
+	)
+	testImplementation('org.junit.jupiter:junit-jupiter-api:5.0.0')
+	testCompile('org.junit.jupiter:junit-jupiter-params:5.0.0')
+	testRuntime('org.junit.jupiter:junit-jupiter-engine:5.0.0')
+	testCompile 'org.assertj:assertj-core:3.10.0'
+	testCompile 'org.mockito:mockito-core:2.+'
 }
