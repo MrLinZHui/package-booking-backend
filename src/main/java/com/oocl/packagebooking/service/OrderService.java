@@ -18,20 +18,18 @@ public class OrderService {
     }
 
     public Erder postOrders(Erder erder) {
-        erder.setOrderstatus("未取件");
+        erder.setOrderstatus("未预约");
         Erder erder1 = orderRespository.save(erder);
 
-        return erder;
+        return erder1;
     }
 
-    public Erder putOrders(Erder erder) {
-
-
+    public  List<Erder> putOrders(Erder erder) {
         Erder erder1 = orderRespository.findByOrderid(erder.getOrderid());
         erder1.setOrderstatus("已预约");
         erder1.setOrdertime(erder.getOrdertime());
         erder1 = orderRespository.save(erder1);
-        return erder1;
+        return orderRespository.findAll();
     }
 
     public List<Erder> finishedOrders(String id, String orderstatus) {

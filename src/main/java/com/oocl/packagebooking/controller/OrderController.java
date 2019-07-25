@@ -19,13 +19,15 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @GetMapping(params = {"status"})
+    @GetMapping
     public ResponseEntity getOrders(@RequestParam(required = false)String  status){
-       // List<Erder> erderList = ;
-        if(status!=null){
-            return ResponseEntity.ok(orderService.getOrdersByStatus(status));
-        }
         return ResponseEntity.ok(orderService.getOrders());
+    }
+    @GetMapping(params = {"status"})
+    public ResponseEntity getOrdersBystatus(@RequestParam(required = false)String  status){
+
+            return ResponseEntity.ok(orderService.getOrdersByStatus(status));
+
     }
 
     @PostMapping
@@ -35,6 +37,7 @@ public class OrderController {
 
     @PutMapping
     public ResponseEntity putOrders(@RequestBody Erder erder){
+        System.out.println("====="+erder.getOrderid()+","+erder.getOrdertime());
         return ResponseEntity.ok(orderService.putOrders(erder));
     }
     @PutMapping(path = "/{id}")

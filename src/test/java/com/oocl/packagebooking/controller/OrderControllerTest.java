@@ -22,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,27 +31,33 @@ public class OrderControllerTest {
     private MockMvc mockMvc;
     @Autowired
     OrderRespository orderRespository;
+
     @Before
-    public void DeletteAll(){
+    public void DeletteAll() {
         orderRespository.deleteAll();
     }
+
     @Test
-    public void should_get_orders_when_give_all_orders()throws Exception{
+    public void should_get_orders_when_give_all_orders() throws Exception {
         //given
-        Erder erder = new Erder("20190725","张三","13192269629","已预约","20190725 09:35:13");
+        Erder erder = new Erder("20190725", "张三", "13192269629", "已预约", "20190725 09:35:13");
         orderRespository.save(erder);
         //when
-        MvcResult mvcResult = this.mockMvc.perform(get("/orders")).andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = this.mockMvc.perform(get("/orders"))
+                .andExpect(status()
+                        .isOk())
+                .andReturn();
         JSONArray jsonArray = new JSONArray(mvcResult.getResponse().getContentAsString());
         //JSONObject jsonObject = new JSONObject(mvcResult.getResponse().getContentAsString());
         //then
         assertEquals("20190725", jsonArray.getJSONObject(0).getString("orderid"));
         assertEquals("张三", jsonArray.getJSONObject(0).getString("receviname"));
     }
+
     @Test
-    public void should_get_order_when_post_a_order()throws Exception{
+    public void should_get_order_when_post_a_order() throws Exception {
         //given
-        Erder erder = new Erder("20190725","张三","13192269629","已预约","20190725 09:35:13");
+        Erder erder = new Erder("20190725", "张三", "13192269629", "已预约", "20190725 09:35:13");
 //        orderRespository.save(erder);
         //when
         MvcResult mvcResult = this.mockMvc.perform(post("/orders").content(new ObjectMapper().writeValueAsString(erder))
@@ -62,11 +69,12 @@ public class OrderControllerTest {
         assertEquals("20190725", jsonObject.getString("orderid"));
         assertEquals("张三", jsonObject.getString("receviname"));
     }
+
     @Test
-    public void should_return_a_new_order_when_put_a_new_time()throws Exception{
+    public void should_return_a_new_order_when_put_a_new_time() throws Exception {
         //given
-        Erder erder1 = new Erder("20190725","张三","13192269629","","");
-        Erder erder = new Erder("20190725","","","","20190725 09:35:13");
+        Erder erder1 = new Erder("20190725", "张三", "13192269629", "", "");
+        Erder erder = new Erder("20190725", "", "", "", "20190725 09:35:13");
         orderRespository.save(erder1);
         //when
         MvcResult mvcResult = this.mockMvc.perform(put("/orders").content(new ObjectMapper().writeValueAsString(erder))
@@ -78,10 +86,11 @@ public class OrderControllerTest {
         assertEquals("已预约", jsonObject.getString("orderstatus"));
         assertEquals("20190725 09:35:13", jsonObject.getString("ordertime"));
     }
+
     @Test
-    public void should_return_a_new_order_when_put_finish()throws Exception{
+    public void should_return_a_new_order_when_put_finish() throws Exception {
         //given
-        Erder erder1 = new Erder("20190725","张三","13192269629","已预约","20190725 09:35:13");
+        Erder erder1 = new Erder("20190725", "张三", "13192269629", "已预约", "20190725 09:35:13");
         orderRespository.save(erder1);
         String status = "已取件";
         //when
@@ -93,13 +102,14 @@ public class OrderControllerTest {
         //then
         assertEquals("已取件", jsonArray.getJSONObject(0).getString("orderstatus"));
     }
+
     @Test
-    public void should_return_a_1_when_get_a_status_isbooking()throws Exception{
+    public void should_return_a_1_when_get_a_status_isbooking() throws Exception {
         //given
-        Erder erder1 = new Erder("20190725","张三","13192269629","已预约","20190725 09:35:13");
-        Erder erder2 = new Erder("20190726","李四","13192269","已取件","20190726 09:35:13");
-        Erder erder3 = new Erder("20190727","王五","13192269","未预约","20190727 09:35:13");
-        List<Erder> erderList = Arrays.asList(erder1,erder2,erder3);
+        Erder erder1 = new Erder("20190725", "张三", "13192269629", "已预约", "20190725 09:35:13");
+        Erder erder2 = new Erder("20190726", "李四", "13192269", "已取件", "20190726 09:35:13");
+        Erder erder3 = new Erder("20190727", "王五", "13192269", "未预约", "20190727 09:35:13");
+        List<Erder> erderList = Arrays.asList(erder1, erder2, erder3);
         orderRespository.saveAll(erderList);
         String status = "已取件";
         //when
@@ -108,13 +118,14 @@ public class OrderControllerTest {
         //then
         assertEquals(1, jsonArray.length());
     }
+
     @Test
-    public void should_return_a_1_when_get_a_status_getOrder()throws Exception{
+    public void should_return_a_1_when_get_a_status_getOrder() throws Exception {
         //given
-        Erder erder1 = new Erder("20190725","张三","13192269629","已预约","20190725 09:35:13");
-        Erder erder2 = new Erder("20190726","李四","13192269","已取件","20190726 09:35:13");
-        Erder erder3 = new Erder("20190727","王五","13192269","未预约","20190727 09:35:13");
-        List<Erder> erderList = Arrays.asList(erder1,erder2,erder3);
+        Erder erder1 = new Erder("20190725", "张三", "13192269629", "已预约", "20190725 09:35:13");
+        Erder erder2 = new Erder("20190726", "李四", "13192269", "已取件", "20190726 09:35:13");
+        Erder erder3 = new Erder("20190727", "王五", "13192269", "未预约", "");
+        List<Erder> erderList = Arrays.asList(erder1, erder2, erder3);
         orderRespository.saveAll(erderList);
         String status = "已取件";
         //when
@@ -124,15 +135,17 @@ public class OrderControllerTest {
         assertEquals(1, jsonArray.length());
         // assertEquals("20190725 09:35:13", jsonObject.getString("ordertime"));
     }
+
     @Test
-    public void should_return_a_1_when_get_a_status_notBooking()throws Exception{
+    public void should_return_a_1_when_get_a_status_notBooking() throws Exception {
         //given
-        Erder erder1 = new Erder("20190725","张三","13192269629","已预约","20190725 09:35:13");
-        Erder erder2 = new Erder("20190726","李四","13192269","已取件","20190726 09:35:13");
-        Erder erder3 = new Erder("20190727","王五","13192269","未预约","20190727 09:35:13");
-        List<Erder> erderList = Arrays.asList(erder1,erder2,erder3);
+        Erder erder1 = new Erder("20190725", "张三", "13192269629", "已预约", "20190725 09:35:13");
+        Erder erder2 = new Erder("20190726", "李四", "13192269", "已取件", "20190726 09:35:13");
+        Erder erder3 = new Erder("20190727", "王五", "13192269", "未预约", "20190727 09:35:13");
+        List<Erder> erderList = Arrays.asList(erder1, erder2, erder3);
         orderRespository.saveAll(erderList);
         String status = "已取件";
+
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/orders?status=未预约")).andExpect(status().isOk()).andReturn();
         JSONArray jsonArray = new JSONArray(mvcResult.getResponse().getContentAsString());
