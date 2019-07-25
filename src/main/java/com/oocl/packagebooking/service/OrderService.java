@@ -18,7 +18,30 @@ public class OrderService {
     }
 
     public Erder postOrders(Erder erder) {
+        erder.setOrderstatus("未取件");
         Erder erder1 = orderRespository.save(erder);
+
         return erder;
+    }
+
+    public Erder putOrders(Erder erder) {
+
+
+        Erder erder1 = orderRespository.findByOrderid(erder.getOrderid());
+        erder1.setOrderstatus("已预约");
+        erder1.setOrdertime(erder.getOrdertime());
+        erder1 = orderRespository.save(erder1);
+        return erder1;
+    }
+
+    public List<Erder> finishedOrders(String id, String orderstatus) {
+        Erder erder = orderRespository.findByOrderid(id);
+        erder.setOrderstatus("已取件");
+        orderRespository.save(erder);
+        return orderRespository.findAll();
+    }
+
+    public List<Erder> getOrdersByStatus(String status) {
+        return orderRespository.findAllByOrderstatus(status);
     }
 }

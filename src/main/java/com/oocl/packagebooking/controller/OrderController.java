@@ -19,14 +19,27 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @GetMapping
-    public ResponseEntity getOrders(){
+    @GetMapping(params = {"status"})
+    public ResponseEntity getOrders(@RequestParam(required = false)String  status){
        // List<Erder> erderList = ;
+        if(status!=null){
+            return ResponseEntity.ok(orderService.getOrdersByStatus(status));
+        }
         return ResponseEntity.ok(orderService.getOrders());
     }
 
     @PostMapping
     public ResponseEntity postOrders(@RequestBody Erder erder){
         return ResponseEntity.ok(orderService.postOrders(erder));
+    }
+
+    @PutMapping
+    public ResponseEntity putOrders(@RequestBody Erder erder){
+        return ResponseEntity.ok(orderService.putOrders(erder));
+    }
+    @PutMapping(path = "/{id}")
+    public ResponseEntity finishedOrders(@PathVariable String id,@RequestBody String orderstatus){
+        System.out.println("======="+orderstatus);
+        return ResponseEntity.ok(orderService.finishedOrders(id,orderstatus));
     }
 }
