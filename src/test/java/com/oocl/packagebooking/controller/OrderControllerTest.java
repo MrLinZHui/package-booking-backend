@@ -3,7 +3,9 @@ package com.oocl.packagebooking.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.packagebooking.Entity.Erder;
 import com.oocl.packagebooking.respository.OrderRespository;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,10 @@ public class OrderControllerTest {
     private MockMvc mockMvc;
     @Autowired
     OrderRespository orderRespository;
+    @Before
+    public void DeletteAll(){
+        orderRespository.deleteAll();
+    }
     @Test
     public void should_get_orders_when_give_all_orders()throws Exception{
         //given
@@ -33,10 +39,11 @@ public class OrderControllerTest {
         orderRespository.save(erder);
         //when
         MvcResult mvcResult = this.mockMvc.perform(get("/orders")).andExpect(status().isOk()).andReturn();
-        JSONObject jsonObject = new JSONObject(mvcResult.getResponse().getContentAsString());
+        JSONArray jsonArray = new JSONArray(mvcResult.getResponse().getContentAsString());
+        //JSONObject jsonObject = new JSONObject(mvcResult.getResponse().getContentAsString());
         //then
-        assertEquals("20190725", jsonObject.getString("orderid"));
-        assertEquals("张三", jsonObject.getString("receviname"));
+        assertEquals("20190725", jsonArray.getJSONObject(0).getString("orderid"));
+        assertEquals("张三", jsonArray.getJSONObject(0).getString("receviname"));
     }
     @Test
     public void should_get_order_when_post_a_order()throws Exception{
